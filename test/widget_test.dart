@@ -57,7 +57,7 @@ AuthController _buildController() {
 }
 
 void main() {
-  testWidgets('renderiza tela de entrada com acoes principais', (tester) async {
+  testWidgets('renderiza tela de entrada com ações principais', (tester) async {
     final controller = _buildController();
 
     await tester.pumpWidget(
@@ -74,7 +74,7 @@ void main() {
     expect(find.text('Entrar como visitante'), findsOneWidget);
   });
 
-  testWidgets('valida campos obrigatorios do login', (tester) async {
+  testWidgets('valida campos obrigatórios do login', (tester) async {
     final controller = _buildController();
 
     await tester.pumpWidget(
@@ -89,7 +89,7 @@ void main() {
     await tester.tap(find.text('Entrar'));
     await tester.pump();
 
-    expect(find.text('Informe um celular valido.'), findsOneWidget);
+    expect(find.text('Informe um celular válido.'), findsOneWidget);
     expect(find.text('A senha deve ter pelo menos 8 caracteres.'), findsOneWidget);
   });
 }

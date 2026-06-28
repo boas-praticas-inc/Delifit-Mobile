@@ -16,3 +16,4 @@ class AuthLocalDataSource {
 
   Future<void> limparSessao() => storageService.limparSessao();
 }
+

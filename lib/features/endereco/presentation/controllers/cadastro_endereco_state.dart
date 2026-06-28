@@ -27,3 +27,4 @@ class CadastroEnderecoState extends Equatable {
   @override
   List<Object?> get props => [carregando, mensagemErro, sucesso];
 }
+

@@ -9,3 +9,4 @@ class ObterModoVisitanteUseCase {
     return repository.obterModoVisitante();
   }
 }
+

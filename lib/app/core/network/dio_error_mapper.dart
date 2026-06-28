@@ -23,8 +23,10 @@ String mapearMensagemErro(DioException error) {
   if (error.type == DioExceptionType.connectionError ||
       error.type == DioExceptionType.connectionTimeout ||
       error.type == DioExceptionType.receiveTimeout) {
-    return 'Nao foi possivel conectar com a API.';
+    return 'Não foi possível conectar com a API.';
   }
 
   return 'Ocorreu um erro inesperado.';
 }
+
+

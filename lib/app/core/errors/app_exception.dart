@@ -6,3 +6,4 @@
   @override
   String toString() => message;
 }
+

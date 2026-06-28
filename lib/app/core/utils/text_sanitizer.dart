@@ -7,3 +7,4 @@
     return value.replaceAll(RegExp(r'[^a-zA-Z]'), '');
   }
 }
+
