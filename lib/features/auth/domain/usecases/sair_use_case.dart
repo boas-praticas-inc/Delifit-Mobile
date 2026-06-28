@@ -9,3 +9,4 @@ class SairUseCase {
     return repository.sair();
   }
 }
+

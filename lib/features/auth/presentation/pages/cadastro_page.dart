@@ -73,7 +73,7 @@ class _CadastroPageState extends ConsumerState<CadastroPage> {
     } catch (_) {
       final mensagem = ref.read(authControllerProvider).state.mensagemErro;
       messenger.showSnackBar(
-        SnackBar(content: Text(mensagem ?? 'Nao foi possivel criar a conta.')),
+        SnackBar(content: Text(mensagem ?? 'Não foi possível criar a conta.')),
       );
     }
   }
@@ -84,10 +84,10 @@ class _CadastroPageState extends ConsumerState<CadastroPage> {
 
     return AuthScaffold(
       title: 'Crie sua conta',
-      subtitle: 'Vamos cadastrar seus dados e depois pedir seu endereco principal.',
+      subtitle: 'Vamos cadastrar seus dados e depois pedir seu endereço principal.',
       footer: TextButton(
         onPressed: state.carregando ? null : () => context.go(AppRoutes.login),
-        child: const Text('Ja possui conta? Fazer login'),
+        child: const Text('Já possui conta? Fazer login'),
       ),
       child: Form(
         key: _formKey,
@@ -113,7 +113,7 @@ class _CadastroPageState extends ConsumerState<CadastroPage> {
               decoration: const InputDecoration(labelText: 'CPF'),
               validator: (value) {
                 if (value == null || TextSanitizer.apenasDigitos(value).length != 11) {
-                  return 'Informe um CPF valido.';
+                  return 'Informe um CPF válido.';
                 }
                 return null;
               },
@@ -126,7 +126,7 @@ class _CadastroPageState extends ConsumerState<CadastroPage> {
               decoration: const InputDecoration(labelText: 'Celular'),
               validator: (value) {
                 if (value == null || TextSanitizer.apenasDigitos(value).length < 10) {
-                  return 'Informe um celular valido.';
+                  return 'Informe um celular válido.';
                 }
                 return null;
               },
@@ -185,3 +185,4 @@ class _CadastroPageState extends ConsumerState<CadastroPage> {
     );
   }
 }
+

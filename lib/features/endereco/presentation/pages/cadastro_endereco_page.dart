@@ -73,7 +73,7 @@ class _CadastroEnderecoPageState extends ConsumerState<CadastroEnderecoPage> {
     } catch (_) {
       final mensagem = ref.read(cadastroEnderecoControllerProvider).state.mensagemErro;
       messenger.showSnackBar(
-        SnackBar(content: Text(mensagem ?? 'Nao foi possivel salvar o endereco.')),
+        SnackBar(content: Text(mensagem ?? 'Não foi possível salvar o endereço.')),
       );
     }
   }
@@ -83,8 +83,9 @@ class _CadastroEnderecoPageState extends ConsumerState<CadastroEnderecoPage> {
     final state = ref.watch(cadastroEnderecoControllerProvider).state;
 
     return AuthScaffold(
-      title: 'Seu endereco principal',
-      subtitle: 'Esse passo pode ser pulado agora, mas ajuda a deixar a experiencia pronta para o primeiro pedido.',
+      title: 'Seu endereço principal',
+      subtitle:
+          'Esse passo pode ser pulado agora, mas ajuda a deixar a experiência pronta para o primeiro pedido.',
       footer: TextButton(
         onPressed: state.carregando
             ? null
@@ -106,7 +107,7 @@ class _CadastroEnderecoPageState extends ConsumerState<CadastroEnderecoPage> {
               decoration: const InputDecoration(labelText: 'CEP'),
               validator: (value) {
                 if (value == null || TextSanitizer.apenasDigitos(value).length != 8) {
-                  return 'Informe um CEP valido.';
+                  return 'Informe um CEP válido.';
                 }
                 return null;
               },
@@ -125,9 +126,9 @@ class _CadastroEnderecoPageState extends ConsumerState<CadastroEnderecoPage> {
                 Expanded(
                   child: TextFormField(
                     controller: _numeroController,
-                    decoration: const InputDecoration(labelText: 'Numero'),
+                    decoration: const InputDecoration(labelText: 'Número'),
                     validator: (value) => value == null || value.trim().isEmpty
-                        ? 'Informe o numero.'
+                        ? 'Informe o número.'
                         : null,
                   ),
                 ),
@@ -138,7 +139,7 @@ class _CadastroEnderecoPageState extends ConsumerState<CadastroEnderecoPage> {
                     textCapitalization: TextCapitalization.characters,
                     decoration: const InputDecoration(labelText: 'UF'),
                     validator: (value) => value == null || value.trim().length != 2
-                        ? 'UF invalida.'
+                        ? 'UF inválida.'
                         : null,
                   ),
                 ),
@@ -168,12 +169,12 @@ class _CadastroEnderecoPageState extends ConsumerState<CadastroEnderecoPage> {
             const SizedBox(height: 16),
             TextFormField(
               controller: _referenciaController,
-              decoration: const InputDecoration(labelText: 'Referencia'),
+              decoration: const InputDecoration(labelText: 'Referência'),
             ),
             const SizedBox(height: 16),
             TextFormField(
               controller: _labelController,
-              decoration: const InputDecoration(labelText: 'Identificacao do endereco'),
+              decoration: const InputDecoration(labelText: 'Identificação do endereço'),
             ),
             const SizedBox(height: 24),
             FilledButton(
@@ -187,7 +188,7 @@ class _CadastroEnderecoPageState extends ConsumerState<CadastroEnderecoPage> {
                       height: 18,
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )
-                  : const Text('Salvar endereco e continuar'),
+                  : const Text('Salvar endereço e continuar'),
             ),
           ],
         ),
@@ -195,3 +196,4 @@ class _CadastroEnderecoPageState extends ConsumerState<CadastroEnderecoPage> {
     );
   }
 }
+

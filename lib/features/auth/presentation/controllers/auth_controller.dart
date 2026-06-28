@@ -164,3 +164,4 @@ class AuthController extends ChangeNotifier {
     return 'Ocorreu um erro inesperado.';
   }
 }
+

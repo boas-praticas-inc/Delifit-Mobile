@@ -29,3 +29,4 @@ class EnderecoModel extends Endereco {
     );
   }
 }
+

@@ -24,3 +24,4 @@ class SessaoUsuario extends Equatable {
         nomeCompleto,
       ];
 }
+

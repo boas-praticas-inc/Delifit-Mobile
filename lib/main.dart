@@ -6,3 +6,4 @@ import 'app/app_widget.dart';
 void main() {
   runApp(const ProviderScope(child: AppWidget()));
 }
+

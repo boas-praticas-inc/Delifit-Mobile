@@ -13,3 +13,4 @@ class EntrarComTelefoneUseCase {
     return repository.entrarComTelefone(telefone: telefone, senha: senha);
   }
 }
+

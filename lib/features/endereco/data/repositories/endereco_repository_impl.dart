@@ -28,7 +28,7 @@ class EnderecoRepositoryImpl implements EnderecoRepository {
   }) async {
     final token = await authLocalDataSource.obterToken();
     if (token == null || token.isEmpty) {
-      throw const AppException('Sessao invalida. Faca login novamente.');
+      throw const AppException('Sessão inválida. Faça login novamente.');
     }
 
     return remoteDataSource.criarMeuEndereco(
@@ -47,3 +47,5 @@ class EnderecoRepositoryImpl implements EnderecoRepository {
     );
   }
 }
+
+

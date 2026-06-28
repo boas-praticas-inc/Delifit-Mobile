@@ -62,3 +62,4 @@ class AuthState extends Equatable {
         precisaCompletarEnderecoInicial,
       ];
 }
+

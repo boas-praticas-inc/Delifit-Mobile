@@ -4,60 +4,46 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../app/core/di/providers.dart';
 import '../../../../app/routes/app_routes.dart';
+import '../widgets/home_catalogo_content.dart';
 
-class HomeVisitantePage extends ConsumerWidget {
+class HomeVisitantePage extends ConsumerStatefulWidget {
   const HomeVisitantePage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomeVisitantePage> createState() => _HomeVisitantePageState();
+}
+
+class _HomeVisitantePageState extends ConsumerState<HomeVisitantePage> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() => ref.read(homeRestaurantesControllerProvider).carregar());
+    Future.microtask(() => ref.read(homeItensCardapioControllerProvider).carregar());
+  }
+
+  void _atualizarPesquisa(String value) {
+    ref.read(homeRestaurantesControllerProvider).atualizarFiltro(value);
+    ref.read(homeItensCardapioControllerProvider).atualizarFiltro(value);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final restaurantesState = ref.watch(homeRestaurantesControllerProvider).state;
+    final itensState = ref.watch(homeItensCardapioControllerProvider).state;
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Explorar como visitante'),
-        actions: [
-          TextButton(
-            onPressed: () async {
-              await ref.read(authControllerProvider).sair();
-              if (context.mounted) {
-                context.go(AppRoutes.entrada);
-              }
-            },
-            child: const Text('Sair'),
-          ),
-        ],
-      ),
-      body: ListView(
-        padding: const EdgeInsets.all(24),
-        children: [
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Modo visitante ativo',
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Voce pode conhecer a experiencia inicial do app, mas recursos como endereco, cartoes e perfil vao pedir autenticacao.',
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(height: 20),
-          FilledButton(
-            onPressed: () => context.go(AppRoutes.login),
-            child: const Text('Entrar agora'),
-          ),
-          const SizedBox(height: 12),
-          OutlinedButton(
-            onPressed: () => context.go(AppRoutes.cadastro),
-            child: const Text('Criar conta'),
-          ),
-        ],
+      body: SafeArea(
+        child: HomeCatalogoContent(
+          tituloEntrega: 'Sua região',
+          subtituloEntrega:
+              'Entre para salvar endereço e concluir pedidos quando esse fluxo estiver disponível.',
+          restaurantesState: restaurantesState,
+          itensState: itensState,
+          onPesquisar: _atualizarPesquisa,
+          visitante: true,
+          onEntrar: () => context.go(AppRoutes.login),
+          onCadastrar: () => context.go(AppRoutes.cadastro),
+        ),
       ),
     );
   }

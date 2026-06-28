@@ -39,3 +39,4 @@ class Endereco extends Equatable {
         label,
       ];
 }
+

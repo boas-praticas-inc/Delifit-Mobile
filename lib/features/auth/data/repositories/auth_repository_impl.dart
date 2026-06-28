@@ -106,3 +106,4 @@ class AuthRepositoryImpl implements AuthRepository {
     return localDataSource.limparSessao();
   }
 }
+

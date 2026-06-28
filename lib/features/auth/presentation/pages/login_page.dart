@@ -42,7 +42,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     } catch (_) {
       final mensagem = ref.read(authControllerProvider).state.mensagemErro;
       messenger.showSnackBar(
-        SnackBar(content: Text(mensagem ?? 'Nao foi possivel entrar.')),
+        SnackBar(content: Text(mensagem ?? 'Não foi possível entrar.')),
       );
     }
   }
@@ -53,10 +53,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
     return AuthScaffold(
       title: 'Entre na sua conta',
-      subtitle: 'Use o numero de celular cadastrado para continuar.',
+      subtitle: 'Use o número de celular cadastrado para continuar.',
       footer: TextButton(
         onPressed: state.carregando ? null : () => context.go(AppRoutes.cadastro),
-        child: const Text('Ainda nao tem conta? Criar agora'),
+        child: const Text('Ainda não tem conta? Criar agora'),
       ),
       child: Form(
         key: _formKey,
@@ -73,7 +73,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               ),
               validator: (value) {
                 if (value == null || TextSanitizer.apenasDigitos(value).length < 10) {
-                  return 'Informe um celular valido.';
+                  return 'Informe um celular válido.';
                 }
                 return null;
               },
@@ -117,3 +117,4 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     );
   }
 }
+

@@ -27,7 +27,7 @@ class EntradaPage extends ConsumerWidget {
           ),
           const SizedBox(height: 12),
           const Text(
-            'Voce pode navegar como visitante e criar sua conta quando quiser.',
+            'Você pode navegar como visitante e criar sua conta quando quiser.',
             style: TextStyle(height: 1.5),
           ),
           const SizedBox(height: 24),
@@ -66,3 +66,4 @@ class EntradaPage extends ConsumerWidget {
     );
   }
 }
+
