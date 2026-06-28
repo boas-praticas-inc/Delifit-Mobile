@@ -5,10 +5,27 @@ class SecureStorageService {
 
   final FlutterSecureStorage _storage;
 
-  Future<void> salvarToken(String token) =>
-      _storage.write(key: 'access_token', value: token);
+  static const String _accessTokenKey = 'access_token';
+  static const String _guestModeKey = 'guest_mode';
 
-  Future<String?> obterToken() => _storage.read(key: 'access_token');
+  Future<void> salvarToken(String token) async {
+    await _storage.write(key: _accessTokenKey, value: token);
+    await _storage.write(key: _guestModeKey, value: 'false');
+  }
 
-  Future<void> limparSessao() => _storage.deleteAll();
+  Future<String?> obterToken() => _storage.read(key: _accessTokenKey);
+
+  Future<void> salvarModoVisitante(bool enabled) {
+    return _storage.write(key: _guestModeKey, value: enabled.toString());
+  }
+
+  Future<bool> obterModoVisitante() async {
+    final value = await _storage.read(key: _guestModeKey);
+    return value == 'true';
+  }
+
+  Future<void> limparSessao() async {
+    await _storage.delete(key: _accessTokenKey);
+    await _storage.delete(key: _guestModeKey);
+  }
 }

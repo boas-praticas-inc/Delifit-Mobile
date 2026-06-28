@@ -1,32 +1,69 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
-class HomePage extends StatelessWidget {
+import '../../../../app/core/di/providers.dart';
+import '../../../../app/routes/app_routes.dart';
+
+class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final sessao = ref.watch(authControllerProvider).state.sessao;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Delifit Mobile'),
+        title: const Text('Inicio'),
+        actions: [
+          IconButton(
+            onPressed: () async {
+              await ref.read(authControllerProvider).sair();
+              if (context.mounted) {
+                context.go(AppRoutes.entrada);
+              }
+            },
+            icon: const Icon(Icons.logout),
+            tooltip: 'Sair',
+          ),
+        ],
       ),
       body: ListView(
         padding: const EdgeInsets.all(24),
-        children: const [
-          _IntroCard(),
-          SizedBox(height: 16),
-          _ModuleCard(
-            titulo: 'Auth',
-            descricao: 'Cadastro, login, sessao e protecao de rotas.',
+        children: [
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Bem-vindo, ${sessao?.nomeCompleto ?? 'cliente'}',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Seu acesso autenticado ja esta pronto. As proximas etapas naturais sao perfil, enderecos, cartoes e pedidos.',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ],
+              ),
+            ),
           ),
-          SizedBox(height: 12),
-          _ModuleCard(
+          const SizedBox(height: 16),
+          const _FeatureTile(
+            titulo: 'Perfil do cliente',
+            descricao: 'Dados pessoais, ajustes da conta e historico basico.',
+          ),
+          const SizedBox(height: 12),
+          const _FeatureTile(
             titulo: 'Enderecos',
-            descricao: 'Fluxo para listar, criar, editar e remover enderecos.',
+            descricao: 'Gerencie seus enderecos de entrega com a API ja pronta.',
           ),
-          SizedBox(height: 12),
-          _ModuleCard(
+          const SizedBox(height: 12),
+          const _FeatureTile(
             titulo: 'Cartoes',
-            descricao: 'Fluxo para manter cartoes salvos do cliente.',
+            descricao: 'Fluxo futuro para manter cartoes e pagamento.',
           ),
         ],
       ),
@@ -34,38 +71,8 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class _IntroCard extends StatelessWidget {
-  const _IntroCard();
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Base pronta para evoluir',
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'O projeto ja esta com Flutter, Riverpod, GoRouter, Dio e a estrutura inicial para comecarmos as features do cliente.',
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _ModuleCard extends StatelessWidget {
-  const _ModuleCard({
-    required this.titulo,
-    required this.descricao,
-  });
+class _FeatureTile extends StatelessWidget {
+  const _FeatureTile({required this.titulo, required this.descricao});
 
   final String titulo;
   final String descricao;
