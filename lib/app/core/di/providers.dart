@@ -30,14 +30,19 @@ import '../../../features/endereco/data/repositories/endereco_repository_impl.da
 import '../../../features/endereco/domain/repositories/endereco_repository.dart';
 import '../../../features/endereco/domain/usecases/criar_meu_endereco_use_case.dart';
 import '../../../features/endereco/presentation/controllers/cadastro_endereco_controller.dart';
+import '../../../features/item_cardapio/data/datasources/item_cardapio_remote_data_source.dart';
+import '../../../features/item_cardapio/data/repositories/item_cardapio_repository_impl.dart';
+import '../../../features/item_cardapio/domain/repositories/item_cardapio_repository.dart';
+import '../../../features/item_cardapio/domain/usecases/listar_itens_cardapio_use_case.dart';
+import '../../../features/item_cardapio/presentation/controllers/home_itens_cardapio_controller.dart';
 import '../../../features/restaurante/data/datasources/restaurante_remote_data_source.dart';
 import '../../../features/restaurante/data/repositories/restaurante_repository_impl.dart';
 import '../../../features/restaurante/domain/repositories/restaurante_repository.dart';
 import '../../../features/restaurante/domain/usecases/listar_restaurantes_use_case.dart';
 import '../../../features/restaurante/presentation/controllers/home_restaurantes_controller.dart';
+import '../../routes/app_router.dart';
 import '../network/api_client.dart';
 import '../storage/secure_storage_service.dart';
-import '../../routes/app_router.dart';
 
 final apiClientProvider = Provider<ApiClient>((ref) => ApiClient());
 
@@ -116,6 +121,25 @@ final homeRestaurantesControllerProvider =
   ),
 );
 
+final itemCardapioRemoteDataSourceProvider =
+    Provider<ItemCardapioRemoteDataSource>(
+  (ref) => ItemCardapioRemoteDataSource(ref.watch(apiClientProvider)),
+);
+
+final itemCardapioRepositoryProvider = Provider<ItemCardapioRepository>(
+  (ref) => ItemCardapioRepositoryImpl(
+    ref.watch(itemCardapioRemoteDataSourceProvider),
+  ),
+);
+
+final homeItensCardapioControllerProvider =
+    ChangeNotifierProvider<HomeItensCardapioController>(
+  (ref) => HomeItensCardapioController(
+    listarItensCardapioUseCase:
+        ListarItensCardapioUseCase(ref.watch(itemCardapioRepositoryProvider)),
+  ),
+);
+
 final clienteRemoteDataSourceProvider = Provider<ClienteRemoteDataSource>(
   (ref) => ClienteRemoteDataSource(ref.watch(apiClientProvider)),
 );
@@ -164,4 +188,3 @@ final appRouterProvider = Provider((ref) {
   final authController = ref.watch(authControllerProvider);
   return buildRouter(authController);
 });
-

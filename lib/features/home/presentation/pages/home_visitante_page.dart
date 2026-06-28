@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../app/core/di/providers.dart';
 import '../../../../app/routes/app_routes.dart';
+import '../widgets/home_catalogo_content.dart';
 
 class HomeVisitantePage extends ConsumerStatefulWidget {
   const HomeVisitantePage({super.key});
@@ -17,74 +18,33 @@ class _HomeVisitantePageState extends ConsumerState<HomeVisitantePage> {
   void initState() {
     super.initState();
     Future.microtask(() => ref.read(homeRestaurantesControllerProvider).carregar());
+    Future.microtask(() => ref.read(homeItensCardapioControllerProvider).carregar());
+  }
+
+  void _atualizarPesquisa(String value) {
+    ref.read(homeRestaurantesControllerProvider).atualizarFiltro(value);
+    ref.read(homeItensCardapioControllerProvider).atualizarFiltro(value);
   }
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(homeRestaurantesControllerProvider).state;
+    final restaurantesState = ref.watch(homeRestaurantesControllerProvider).state;
+    final itensState = ref.watch(homeItensCardapioControllerProvider).state;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Explorar Delifit'),
-        actions: [
-          TextButton(
-            onPressed: () async {
-              await ref.read(authControllerProvider).sair();
-              if (context.mounted) context.go(AppRoutes.entrada);
-            },
-            child: const Text('Sair'),
-          ),
-        ],
-      ),
-      body: ListView(
-        padding: const EdgeInsets.all(24),
-        children: [
-          const Card(
-            child: Padding(
-              padding: EdgeInsets.all(20),
-              child: Text(
-                'Modo visitante ativo. Conheça os restaurantes e faça login para salvar endereços, cartões e acompanhar seus pedidos.',
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
-          if (state.carregando)
-            const Center(child: CircularProgressIndicator())
-          else if (state.erro != null)
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Text(state.erro!),
-              ),
-            )
-          else
-            ...state.restaurantes.map(
-              (restaurante) => Padding(
-                padding: const EdgeInsets.only(bottom: 12),
-                child: Card(
-                  child: ListTile(
-                    leading: const CircleAvatar(child: Icon(Icons.restaurant)),
-                    title: Text(restaurante.nomeFantasia),
-                    subtitle: Text(
-                      restaurante.descricao ?? 'Restaurante parceiro Delifit',
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          const SizedBox(height: 20),
-          FilledButton(
-            onPressed: () => context.go(AppRoutes.login),
-            child: const Text('Entrar agora'),
-          ),
-          const SizedBox(height: 12),
-          OutlinedButton(
-            onPressed: () => context.go(AppRoutes.cadastro),
-            child: const Text('Criar conta'),
-          ),
-        ],
+      body: SafeArea(
+        child: HomeCatalogoContent(
+          tituloEntrega: 'Sua região',
+          subtituloEntrega:
+              'Entre para salvar endereço e concluir pedidos quando esse fluxo estiver disponível.',
+          restaurantesState: restaurantesState,
+          itensState: itensState,
+          onPesquisar: _atualizarPesquisa,
+          visitante: true,
+          onEntrar: () => context.go(AppRoutes.login),
+          onCadastrar: () => context.go(AppRoutes.cadastro),
+        ),
       ),
     );
   }
 }
-
