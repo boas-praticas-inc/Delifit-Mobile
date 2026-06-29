@@ -1,10 +1,14 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../app/core/utils/image_url_resolver.dart';
 import '../../../item_cardapio/domain/entities/item_cardapio.dart';
-import '../../../restaurante/domain/entities/restaurante.dart';
 import '../../../item_cardapio/presentation/controllers/home_itens_cardapio_state.dart';
+import '../../../restaurante/domain/entities/restaurante.dart';
 import '../../../restaurante/presentation/controllers/home_restaurantes_state.dart';
+
+const double _proporcaoImagemRestaurante = 16 / 9;
+const double _proporcaoImagemItem = 16 / 9;
 
 class HomeCatalogoContent extends StatelessWidget {
   const HomeCatalogoContent({
@@ -39,7 +43,9 @@ class HomeCatalogoContent extends StatelessWidget {
     final itensRecentes = [...itensState.filtrados]
       ..sort((a, b) => b.criadoEm.compareTo(a.criadoEm));
 
-    final itensDestaqueBase = itensState.filtrados.where((item) => item.tags.isNotEmpty).toList();
+    final itensDestaqueBase = itensState.filtrados
+        .where((item) => item.tags.isNotEmpty)
+        .toList();
     final itensDestaque = itensDestaqueBase.isNotEmpty
         ? itensDestaqueBase
         : itensState.filtrados;
@@ -61,7 +67,10 @@ class HomeCatalogoContent extends StatelessWidget {
                 children: [
                   const Padding(
                     padding: EdgeInsets.only(top: 2),
-                    child: Icon(Icons.location_on_outlined, color: Colors.white),
+                    child: Icon(
+                      Icons.location_on_outlined,
+                      color: Colors.white,
+                    ),
                   ),
                   const SizedBox(width: 8),
                   Expanded(
@@ -115,7 +124,7 @@ class HomeCatalogoContent extends StatelessWidget {
               TextField(
                 onChanged: onPesquisar,
                 decoration: InputDecoration(
-                  hintText: 'Pesquisar restaurantes ou refeições',
+                  hintText: 'Pesquisar restaurantes ou refei\u00E7\u00F5es',
                   prefixIcon: const Icon(Icons.search),
                   filled: true,
                   fillColor: Colors.white,
@@ -135,10 +144,22 @@ class HomeCatalogoContent extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 24),
             children: const [
-              _CategoriaBubble(titulo: 'Ver tudo', icone: Icons.grid_view_rounded),
-              _CategoriaBubble(titulo: 'Ofertas', icone: Icons.local_offer_outlined),
-              _CategoriaBubble(titulo: 'Fitness', icone: Icons.fitness_center_outlined),
-              _CategoriaBubble(titulo: 'Refeições', icone: Icons.restaurant_menu_outlined),
+              _CategoriaBubble(
+                titulo: 'Ver tudo',
+                icone: Icons.grid_view_rounded,
+              ),
+              _CategoriaBubble(
+                titulo: 'Ofertas',
+                icone: Icons.local_offer_outlined,
+              ),
+              _CategoriaBubble(
+                titulo: 'Fitness',
+                icone: Icons.fitness_center_outlined,
+              ),
+              _CategoriaBubble(
+                titulo: 'Refei\u00E7\u00F5es',
+                icone: Icons.restaurant_menu_outlined,
+              ),
             ],
           ),
         ),
@@ -152,12 +173,15 @@ class HomeCatalogoContent extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Exploração liberada para visitantes',
-                      style: Theme.of(context).textTheme.titleMedium,
+                      'Explora\u00E7\u00E3o liberada para visitantes',
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        height: 1.2,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     const Text(
-                      'Você pode navegar pelo catálogo normalmente. Quando o fluxo de pedidos for liberado, será necessário criar uma conta ou entrar para concluir a compra.',
+                      'Voc\u00EA pode navegar pelo cat\u00E1logo normalmente. Quando o fluxo de pedidos for liberado, ser\u00E1 necess\u00E1rio criar uma conta ou entrar para concluir a compra.',
                     ),
                     const SizedBox(height: 14),
                     Row(
@@ -183,42 +207,42 @@ class HomeCatalogoContent extends StatelessWidget {
             ),
           ),
         _Section(
-          titulo: 'Restaurantes com fit e saudável',
+          titulo: 'Restaurantes com fit e saud\u00E1vel',
           child: restaurantesState.carregando
               ? const Padding(
                   padding: EdgeInsets.all(24),
                   child: Center(child: CircularProgressIndicator()),
                 )
               : restaurantesState.erro != null
-                  ? Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(18),
-                        child: Text(restaurantesState.erro!),
-                      ),
-                    )
-                  : _RestauranteList(restaurantes: restaurantes),
+              ? Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(18),
+                    child: Text(restaurantesState.erro!),
+                  ),
+                )
+              : _RestauranteList(restaurantes: restaurantes),
         ),
         _Section(
-          titulo: 'Refeições recentes',
+          titulo: 'Refei\u00E7\u00F5es recentes',
           child: itensState.carregando
               ? const Padding(
                   padding: EdgeInsets.all(24),
                   child: Center(child: CircularProgressIndicator()),
                 )
               : itensState.erro != null
-                  ? Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(18),
-                        child: Text(itensState.erro!),
-                      ),
-                    )
-                  : _ItemCardapioList(
-                      itens: itensRecentes.take(6).toList(),
-                      mapaRestaurantes: mapaRestaurantes,
-                    ),
+              ? Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(18),
+                    child: Text(itensState.erro!),
+                  ),
+                )
+              : _ItemCardapioList(
+                  itens: itensRecentes.take(6).toList(),
+                  mapaRestaurantes: mapaRestaurantes,
+                ),
         ),
         _Section(
-          titulo: 'Refeições em destaque',
+          titulo: 'Refei\u00E7\u00F5es em destaque',
           child: _ItemCardapioDestaqueList(
             itens: itensDestaque.take(4).toList(),
             mapaRestaurantes: mapaRestaurantes,
@@ -294,7 +318,7 @@ class _RestauranteList extends StatelessWidget {
     }
 
     return SizedBox(
-      height: 196,
+      height: 252,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: restaurantes.length,
@@ -302,25 +326,19 @@ class _RestauranteList extends StatelessWidget {
         itemBuilder: (context, index) {
           final restaurante = restaurantes[index];
           return SizedBox(
-            width: 230,
+            width: 272,
             child: Card(
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      height: 74,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFE8F3E2),
+                    AspectRatio(
+                      aspectRatio: _proporcaoImagemRestaurante,
+                      child: _CatalogoImagem(
+                        imageUrl: restaurante.fotoUrl,
+                        fallbackIcon: Icons.storefront_outlined,
                         borderRadius: BorderRadius.circular(18),
-                      ),
-                      child: const Center(
-                        child: Icon(
-                          Icons.storefront_outlined,
-                          size: 36,
-                          color: Color(0xFF2E7D32),
-                        ),
                       ),
                     ),
                     const SizedBox(height: 12),
@@ -328,13 +346,16 @@ class _RestauranteList extends StatelessWidget {
                       restaurante.nomeFantasia,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.titleMedium,
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        height: 1.2,
+                      ),
                     ),
                     const SizedBox(height: 6),
                     Expanded(
                       child: Text(
                         restaurante.descricao ??
-                            'Restaurante parceiro com opções pensadas para o dia a dia.',
+                            'Restaurante parceiro com op\u00E7\u00F5es pensadas para o dia a dia.',
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -351,7 +372,10 @@ class _RestauranteList extends StatelessWidget {
 }
 
 class _ItemCardapioList extends StatelessWidget {
-  const _ItemCardapioList({required this.itens, required this.mapaRestaurantes});
+  const _ItemCardapioList({
+    required this.itens,
+    required this.mapaRestaurantes,
+  });
 
   final List<ItemCardapio> itens;
   final Map<int, String> mapaRestaurantes;
@@ -362,41 +386,37 @@ class _ItemCardapioList extends StatelessWidget {
       return const Card(
         child: Padding(
           padding: EdgeInsets.all(18),
-          child: Text('Nenhuma refeição encontrada no momento.'),
+          child: Text('Nenhuma refei\u00E7\u00E3o encontrada no momento.'),
         ),
       );
     }
 
     return SizedBox(
-      height: 208,
+      height: 294,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: itens.length,
         separatorBuilder: (_, _) => const SizedBox(width: 12),
         itemBuilder: (context, index) {
           final item = itens[index];
-          final restauranteNome = mapaRestaurantes[item.restauranteId] ?? 'Restaurante parceiro';
+          final restauranteNome =
+              mapaRestaurantes[item.restauranteId] ?? 'Restaurante parceiro';
           final variacao = item.variacaoPrincipal;
+          final tagsFormatadas = _formatarTags(item.tags);
           return SizedBox(
-            width: 230,
+            width: 272,
             child: Card(
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      height: 74,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFE8F3E2),
+                    AspectRatio(
+                      aspectRatio: _proporcaoImagemItem,
+                      child: _CatalogoImagem(
+                        imageUrl: item.fotoUrl,
+                        fallbackIcon: Icons.lunch_dining_outlined,
                         borderRadius: BorderRadius.circular(18),
-                      ),
-                      child: const Center(
-                        child: Icon(
-                          Icons.lunch_dining_outlined,
-                          size: 36,
-                          color: Color(0xFF2E7D32),
-                        ),
                       ),
                     ),
                     const SizedBox(height: 12),
@@ -404,7 +424,10 @@ class _ItemCardapioList extends StatelessWidget {
                       item.nome,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.titleMedium,
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        height: 1.2,
+                      ),
                     ),
                     const SizedBox(height: 4),
                     Text(
@@ -413,20 +436,44 @@ class _ItemCardapioList extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
-                    const SizedBox(height: 6),
-                    Expanded(
-                      child: Text(
-                        item.descricao ?? 'Refeição disponível no cardápio do restaurante.',
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
+                    if (tagsFormatadas.isNotEmpty) ...[
+                      const SizedBox(height: 6),
+                      Wrap(
+                        spacing: 4,
+                        runSpacing: 4,
+                        children: tagsFormatadas
+                            .map(
+                              (tag) => Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 4,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFE8F3E2),
+                                  borderRadius: BorderRadius.circular(999),
+                                ),
+                                child: Text(
+                                  tag,
+                                  style: Theme.of(context).textTheme.bodySmall
+                                      ?.copyWith(
+                                        color: const Color(0xFF2E7D32),
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 10,
+                                        height: 1,
+                                      ),
+                                ),
+                              ),
+                            )
+                            .toList(),
                       ),
-                    ),
-                    const SizedBox(height: 8),
+                    ],
+                    const Spacer(),
                     Text(
                       _formatarPreco(variacao?.preco),
                       style: const TextStyle(
                         color: Color(0xFF2E7D32),
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w800,
+                        fontSize: 20,
                       ),
                     ),
                   ],
@@ -441,7 +488,10 @@ class _ItemCardapioList extends StatelessWidget {
 }
 
 class _ItemCardapioDestaqueList extends StatelessWidget {
-  const _ItemCardapioDestaqueList({required this.itens, required this.mapaRestaurantes});
+  const _ItemCardapioDestaqueList({
+    required this.itens,
+    required this.mapaRestaurantes,
+  });
 
   final List<ItemCardapio> itens;
   final Map<int, String> mapaRestaurantes;
@@ -452,7 +502,7 @@ class _ItemCardapioDestaqueList extends StatelessWidget {
       return const Card(
         child: Padding(
           padding: EdgeInsets.all(18),
-          child: Text('Nenhuma refeição em destaque no momento.'),
+          child: Text('Nenhuma refei\u00E7\u00E3o em destaque no momento.'),
         ),
       );
     }
@@ -460,20 +510,25 @@ class _ItemCardapioDestaqueList extends StatelessWidget {
     return Column(
       children: itens.map((item) {
         final variacao = item.variacaoPrincipal;
-        final restauranteNome = mapaRestaurantes[item.restauranteId] ?? 'Restaurante parceiro';
+        final restauranteNome =
+            mapaRestaurantes[item.restauranteId] ?? 'Restaurante parceiro';
         return Padding(
           padding: const EdgeInsets.only(bottom: 12),
           child: Card(
             child: ListTile(
               contentPadding: const EdgeInsets.all(14),
-              leading: const CircleAvatar(
-                radius: 28,
-                backgroundColor: Color(0xFFE8F3E2),
-                child: Icon(Icons.restaurant_menu, color: Color(0xFF2E7D32)),
+              leading: SizedBox(
+                width: 60,
+                height: 60,
+                child: _CatalogoImagem(
+                  imageUrl: item.fotoUrl,
+                  fallbackIcon: Icons.restaurant_menu,
+                  borderRadius: BorderRadius.circular(16),
+                ),
               ),
               title: Text(item.nome),
               subtitle: Text(
-                '$restauranteNome • ${_formatarPreco(variacao?.preco)}',
+                '$restauranteNome \u2022 ${_formatarPreco(variacao?.preco)}',
               ),
               trailing: variacao == null
                   ? null
@@ -484,6 +539,93 @@ class _ItemCardapioDestaqueList extends StatelessWidget {
       }).toList(),
     );
   }
+}
+
+class _CatalogoImagem extends StatelessWidget {
+  const _CatalogoImagem({
+    required this.imageUrl,
+    required this.fallbackIcon,
+    required this.borderRadius,
+  });
+
+  final String? imageUrl;
+  final IconData fallbackIcon;
+  final BorderRadius borderRadius;
+
+  @override
+  Widget build(BuildContext context) {
+    final resolvedUrl = ImageUrlResolver.resolve(imageUrl);
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: const Color(0xFFE8F3E2),
+        borderRadius: borderRadius,
+      ),
+      child: ClipRRect(
+        borderRadius: borderRadius,
+        child: resolvedUrl == null
+            ? _FallbackImagem(icone: fallbackIcon)
+            : Image.network(
+                resolvedUrl,
+                fit: BoxFit.cover,
+                filterQuality: FilterQuality.medium,
+                errorBuilder: (context, error, stackTrace) =>
+                    _FallbackImagem(icone: fallbackIcon),
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) {
+                    return child;
+                  }
+
+                  return Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      _FallbackImagem(icone: fallbackIcon),
+                      const Center(
+                        child: SizedBox(
+                          width: 22,
+                          height: 22,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+      ),
+    );
+  }
+}
+
+class _FallbackImagem extends StatelessWidget {
+  const _FallbackImagem({required this.icone});
+
+  final IconData icone;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(child: Icon(icone, size: 36, color: const Color(0xFF2E7D32)));
+  }
+}
+
+List<String> _formatarTags(List<String> tags) {
+  return tags
+      .map((tag) => tag.trim())
+      .where((tag) => tag.isNotEmpty)
+      .map(_formatarTag)
+      .toList();
+}
+
+String _formatarTag(String tag) {
+  final palavras = tag
+      .toLowerCase()
+      .replaceAll('_', ' ')
+      .replaceAll('-', ' ')
+      .split(RegExp(r'\s+'))
+      .where((parte) => parte.isNotEmpty)
+      .map((parte) => parte[0].toUpperCase() + parte.substring(1))
+      .toList();
+
+  return palavras.join(' ');
 }
 
 String _formatarPreco(double? preco) {
